@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101a19">
+<title>SunoSafe — Voice Safety Companion</title>
+
+<style>
+:root{
+  --ink:#14201f;
+  --muted:#71817e;
+  --line:#e5eae5;
+  --paper:#f6f7f3;
+  --green:#b9f36a;
+  --deep:#101a19;
+  --red:#d94e40;
+  --amber:#e7a345;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,
+    BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink)}
+button,input{font:inherit}
+button{cursor:pointer}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:230px minmax(0,1fr);
+}
+.sidebar{
+  background:var(--deep);
+  color:#f5f8f4;
+  padding:28px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+.brand{display:flex;align-items:center;gap:12px;padding:0 10px}
+.brand-icon{
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:12px;color:var(--deep);
+  background:var(--green);font-size:23px;font-weight:800;
+}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:-.6px}
+.eyebrow{
+  font-size:10px;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--muted);
+}
+.sidebar .eyebrow{color:#839793}
+.nav{display:grid;gap:7px}
+.nav button{
+  text-align:left;border:0;border-radius:12px;
+  background:transparent;color:#b7c7c2;
+  padding:13px 12px;font-size:13px;
+}
+.nav button.active,.nav button:hover{background:#263633;color:white}
+.nav button.active:before{
+  content:"●";color:var(--green);margin-right:10px;
+}
+.nav button:not(.active):before{
+  content:"●";color:#60736d;margin-right:10px;
+}
+.sidebar-note{
+  margin-top:auto;border:1px solid #30413c;
+  background:#172522;border-radius:16px;padding:17px;
+  font-size:12px;line-height:1.7;color:#b7c7c2;
+}
+.sidebar-note strong{display:block;color:white;margin:8px 0 3px}
+.sidebar-footer{
+  padding:0 10px;color:#71827c;font-size:10px;
+  letter-spacing:1.2px;line-height:1.8;text-transform:uppercase;
+}
+main{
+  width:100%;max-width:1450px;margin:0 auto;
+  padding:38px clamp(18px,4vw,60px) 60px;
+}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;margin-bottom:30px;
+}
+.topbar h1{
+  font-size:clamp(28px,3vw,42px);font-weight:700;
+  letter-spacing:-1.5px;margin:9px 0;
+}
+.topbar p{color:var(--muted);font-size:13px;margin:0;line-height:1.7}
+.pill{
+  border:1px solid var(--line);background:white;border-radius:999px;
+  padding:8px 12px;color:#65736e;font-size:11px;white-space:nowrap;
+}
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr);
+  gap:20px;margin-bottom:24px;
+}
+.hero-copy{
+  background:#dff2e9;border-radius:22px;
+  padding:clamp(24px,3vw,40px);position:relative;overflow:hidden;
+}
+.hero-copy:after{
+  content:"◉";position:absolute;right:-25px;bottom:-85px;
+  font-size:220px;color:#c6e8d7;pointer-events:none;
+}
+.hero-copy h2{
+  max-width:520px;font-size:clamp(30px,3.4vw,47px);
+  line-height:1.12;letter-spacing:-1.8px;margin:18px 0;
+  position:relative;z-index:1;
+}
+.hero-copy p{
+  max-width:440px;color:#536d63;font-size:14px;
+  line-height:1.8;position:relative;z-index:1;
+}
+.hero-actions{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;
+  position:relative;z-index:1;
+}
+.btn{
+  border:1px solid var(--line);border-radius:11px;
+  background:white;color:var(--ink);padding:12px 16px;
+  font-size:12px;font-weight:700;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 5px 18px #15251a10}
+.btn-primary{background:var(--deep);color:white;border-color:var(--deep)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.context-optin{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:13px 14px;border:1px solid #dce7dc;border-radius:12px;
+  background:#f7faf5;color:var(--ink);cursor:pointer;
+}
+.context-optin input{margin:3px 0 0;flex-shrink:0;accent-color:#315b45;width:16px;height:16px}
+.context-optin span{display:grid;gap:5px}
+.context-optin strong{font-size:12px}
+.context-optin small{font-size:10px;line-height:1.55;color:var(--muted)}
+.language-selectors{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:14px 0;
+}
+.language-choice{
+  min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcf9;
+}
+.language-choice label{display:block;font-size:11px;font-weight:750;margin-bottom:7px;color:var(--ink)}
+.language-choice select{width:100%;min-width:0;border:1px solid #dce4da;border-radius:8px;padding:9px 8px;background:white;color:var(--ink);font-size:12px}
+.language-choice small{display:block;margin-top:6px;font-size:10px;line-height:1.5;color:var(--muted)}
+.upload-card{
+  background:white;border:1px solid var(--line);
+  border-radius:22px;padding:25px;display:flex;
+  flex-direction:column;justify-content:center;gap:15px;
+}
+.upload-zone{
+  min-height:160px;display:grid;place-items:center;
+  text-align:center;padding:20px;border:1.5px dashed #cbd6ce;
+  border-radius:15px;background:#fafbf8;
+  transition:background .2s,border-color .2s;cursor:pointer;
+}
+.upload-zone.dragging{border-color:#6b9d7c;background:#eaf5ec}
+.upload-icon{font-size:32px;margin-bottom:10px}
+.upload-zone strong{font-size:14px}
+.upload-zone p{color:var(--muted);font-size:11px;line-height:1.7}
+.file-name{
+  font-size:12px;color:#476c54;overflow-wrap:anywhere;margin-top:8px;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin:30px 0 15px;
+}
+.section-head h2{font-size:19px;letter-spacing:-.5px;margin:0}
+.section-head span{
+  font-size:10px;letter-spacing:1px;color:var(--muted);
+  text-transform:uppercase;text-align:right;
+}
+.report{
+  background:white;border:1px solid var(--line);
+  border-radius:22px;padding:clamp(17px,2.5vw,30px);
+}
+.signal-banner{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:20px;border-radius:15px;padding:22px;
+  background:#e9f6ed;border:1px solid #d6eadd;
+}
+.signal-banner.high{background:#fff0ec;border-color:#f6d4ca}
+.signal-banner.medium{background:#fff7e8;border-color:#f0e2c1}
+.signal-banner.incomplete{background:#f4f3ed;border-color:#d9d5c8}
+.signal-banner h3{font-size:17px;margin:9px 0 7px;letter-spacing:-.5px}
+.signal-banner p{
+  font-size:12px;line-height:1.7;max-width:700px;
+  color:#6c7a73;margin:0;
+}
+.score{
+  width:65px;height:65px;flex-shrink:0;border:5px solid #dbe9d9;
+  border-radius:50%;display:grid;place-items:center;
+  background:white;font-size:19px;font-weight:800;
+}
+.score.high{border-color:#e3a69c}
+.score.medium{border-color:#e6c98a}
+.score.incomplete{border-color:#b9b6a9;color:#6d6a60}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 24px}
+.meta span{
+  border:1px solid var(--line);border-radius:7px;padding:7px 9px;
+  color:#68766e;font-family:ui-monospace,monospace;font-size:10px;
+}
+.context-insight{
+  border:1px solid #d9e5dc;background:#f8faf7;border-radius:14px;
+  padding:17px 19px;margin:0 0 22px;
+}
+.context-insight h3{font-size:15px;margin:8px 0 6px;letter-spacing:-.25px}
+.context-insight p{font-size:12px;line-height:1.75;color:var(--muted);margin:0;max-width:850px}
+.context-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.context-meta span{font-size:10px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;color:#68766e}
+.context-uncertainty{margin-top:9px!important;font-style:italic}
+.audio-summary-panel{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:center;
+  border:1px solid #dce8dc;background:#f7faf5;border-radius:14px;padding:16px 18px;margin:0 0 26px;
+}
+.audio-summary-copy h3{font-size:15px;margin:0 0 5px;letter-spacing:-.3px}
+.audio-summary-copy p{font-size:12px;line-height:1.65;color:var(--muted);margin:0;max-width:620px}
+.audio-summary-controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.audio-summary-panel .status{grid-column:1/-1;min-height:0}
+.speech-audio{grid-column:1/-1;width:100%;max-width:560px;margin-top:2px}
+@media(max-width:680px){.audio-summary-panel{grid-template-columns:1fr}.audio-summary-controls{justify-content:flex-start}}
+.transcript{
+  background:#fafbf8;border:1px solid var(--line);
+  border-radius:13px;padding:18px;line-height:2;
+  font-size:14px;overflow-wrap:anywhere;
+}
+.transcript mark{
+  background:#ffdf91;color:#513d16;border-radius:4px;padding:2px 3px;
+}
+.evidence-list{display:grid;gap:10px}
+.evidence-card{border:1px solid var(--line);border-radius:15px;padding:18px}
+.evidence-title{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:10px;font-size:13px;font-weight:750;
+}
+.evidence-title .dot:before{content:"●";color:var(--red);margin-right:10px}
+.severity{
+  background:#fff0ed;color:#c64b3d;border-radius:5px;
+  padding:5px 7px;font-family:ui-monospace,monospace;
+  font-size:9px;white-space:nowrap;
+}
+.severity.medium{background:#fff4df;color:#a97623}
+.phrases{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.phrase{
+  border:1px solid #f0dfbd;background:#fffaf0;border-radius:7px;
+  padding:7px 9px;font-size:12px;color:#82602d;
+}
+.evidence-card p{font-size:12px;color:var(--muted);line-height:1.8;margin:8px 0}
+.checklist{list-style:none;padding:0;display:grid;gap:12px}
+.checklist li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:12px;line-height:1.7;color:#5e6d65;
+}
+.check{
+  width:21px;height:21px;border-radius:7px;background:#e9f4e6;
+  color:#59835b;display:grid;place-items:center;flex-shrink:0;
+}
+.recovery{
+  background:#f6f8f3;border:1px solid var(--line);
+  border-radius:16px;padding:20px;
+}
+.recovery h3{margin:0 0 8px}
+.recovery p{font-size:12px;color:var(--muted);line-height:1.7}
+.recovery-options{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin:16px 0;
+}
+.recovery-option{
+  text-align:left;border:1px solid var(--line);background:white;
+  border-radius:11px;padding:14px;font-size:12px;line-height:1.6;
+}
+.recovery-option.selected{
+  border-color:#7da88b;background:#e8f4e8;
+  box-shadow:inset 0 0 0 1px #7da88b;
+}
+.recovery-result{
+  background:white;border:1px solid var(--line);border-radius:12px;
+  padding:16px;line-height:1.8;font-size:13px;
+}
+.notice{
+  background:#f4f6f2;border-radius:10px;padding:13px;
+  font-size:11px;line-height:1.8;color:#6b7970;margin-top:24px;
+}
+.hidden{display:none!important}
+.status{color:var(--muted);font-size:12px;line-height:1.7}
+.error{
+  color:#b13d31;background:#fff0ed;border:1px solid #f4d2cb;
+  border-radius:10px;padding:12px;font-size:12px;line-height:1.7;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
+footer{margin-top:35px;text-align:center;color:#8a9690;font-size:11px;line-height:1.8}
+section[id]{scroll-margin-top:20px}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{padding:15px;gap:15px}
+  .sidebar .nav{display:flex;overflow-x:auto}
+  .nav button{white-space:nowrap}
+  .sidebar-note,.sidebar-footer{display:none}
+  .hero{grid-template-columns:1fr}
+  main{padding-top:24px}
+}
+@media(max-width:560px){
+  .topbar{align-items:flex-start;flex-direction:column}
+  .signal-banner{align-items:flex-start}
+  .score{width:54px;height:54px;font-size:16px}
+  .recovery-options{grid-template-columns:1fr}
+  .report{padding:14px}
+  .section-head{align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">♧</div>
+      <div>
+        <div class="brand-name">sunosafe.</div>
+        <div class="eyebrow">Voice safety companion</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="eyebrow" style="padding:0 10px 10px">Workspace</div>
+      <nav class="nav">
+        <button class="active" data-section="overview">Overview</button>
+        <button data-section="analyzer">Call analyzer</button>
+        <button data-section="how">How it works</button>
+        <button data-section="safety">Safety guide</button>
+      </nav>
+    </div>
+
+    <div class="sidebar-note">
+      <span style="font-size:20px">✳</span>
+      <strong>Think before you trust.</strong>
+      Take a breath. Verify the caller independently. Keep your sensitive details to yourself.
+    </div>
+
+    <div class="sidebar-footer">
+      Built for real-life conversations<br>
+      Powered by Gnani AI voice models<br>
+      Build v0.5.2
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">01 / Voice intelligence</div>
+        <h1>Every call tells a story.</h1>
+        <p>Understand suspicious calls before they become costly mistakes.</p>
+      </div>
+      <span class="pill" id="connectionStatus">● Checking backend…</span>
+    </header>
+
+    <section class="hero" id="analyzer">
+      <div class="hero-copy">
+        <div class="eyebrow">Your voice safety companion</div>
+        <h2>Before you trust the call, understand it.</h2>
+        <p>
+          Upload a suspicious recording. SunoSafe examines the conversation,
+          surfaces potential warning signs, and explains what you can do next.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="chooseAudio">Analyze a recording ↗</button>
+          <button class="btn" id="demoButton">Try sample analysis</button>
+        </div>
+      </div>
+
+      <div class="upload-card">
+        <div>
+          <div class="eyebrow">Audio investigation</div>
+          <h3 style="margin:8px 0">Start with a conversation</h3>
+          <p class="status">Use an audio file you own or have permission to analyze.</p>
+        </div>
+
+        <label class="upload-zone" id="dropZone" for="audioInput">
+          <div>
+            <div class="upload-icon">♫</div>
+            <strong>Drop your audio here</strong>
+            <p>WAV, MP3, M4A, OGG, FLAC or AAC · max 30 seconds / 15 MB. Language is detected automatically.</p>
+            <div class="file-name" id="fileName">No file selected</div>
+          </div>
+        </label>
+
+        <input
+          id="audioInput"
+          type="file"
+          accept="audio/wav,audio/x-wav,audio/mpeg,audio/mp3,audio/ogg,audio/flac,audio/aac,audio/mp4,audio/x-m4a,.wav,.mp3,.m4a,.ogg,.flac,.aac"
+          hidden
+        >
+        <p class="status" id="autoLanguageNotice">Prisma automatically detects Hindi, English, Telugu and common code-mixed speech.</p>
+
+        <label class="context-optin" for="useContextAnalysis">
+          <input type="checkbox" id="useContextAnalysis">
+          <span>
+            <strong>Enable deeper conversation analysis (optional)</strong>
+            <small>When selected, SunoSafe sends the transcript text (not the original audio) to Google Gemini to understand intent, negation, past actions and conversation sequence. Requires GEMINI_API_KEY in your local .env. Leave unchecked to use phrase-pattern analysis only.</small>
+          </span>
+        </label>
+
+        <button class="btn btn-primary" id="analyzeButton" disabled>
+          Analyze recording
+        </button>
+        <div class="status" id="uploadStatus" aria-live="polite">
+          Checking API availability…
+        </div>
+        <div class="error hidden" id="errorBox" role="alert"></div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="section-head">
+        <h2>02 / The signal report</h2>
+        <span id="reportStatus">Waiting for analysis</span>
+      </div>
+
+      <div class="report">
+        <div class="signal-banner" id="signalBanner">
+          <div>
+            <div class="eyebrow">Analysis status</div>
+            <h3 id="signalTitle">Your next conversation starts here.</h3>
+            <p id="signalDescription">
+              Analyze a recording or try the sample to see how SunoSafe explains potential warning signs.
+            </p>
+          </div>
+          <div class="score" id="signalScore">—</div>
+        </div>
+
+        <div class="meta">
+          <span id="modelLabel">GNANI VOICE AI</span>
+          <span id="signalCount">0 SIGNAL GROUPS</span>
+          <span id="scoreMethodLabel">HEURISTIC SCORE · NOT A PROBABILITY</span>
+        </div>
+
+        <div class="context-insight hidden" id="contextInsight" aria-live="polite">
+          <div class="eyebrow">CONVERSATION CONTEXT</div>
+          <h3 id="contextCallPurpose">Conversation interpretation</h3>
+          <p id="contextSummary"></p>
+          <div class="context-meta">
+            <span id="contextStatus"></span>
+            <span id="victimStatus"></span>
+          </div>
+          <p id="reportedActions" class="context-uncertainty"></p>
+          <p class="context-uncertainty" id="contextUncertainty"></p>
+        </div>
+
+        <div class="audio-summary-panel" aria-labelledby="audioSummaryTitle">
+          <div class="audio-summary-copy">
+            <h3 id="audioSummaryTitle">Hear your result</h3>
+            <p>After analysis, choose Hindi or Telugu to hear what kind of call the evidence may indicate and what safety steps to take. This choice never changes the transcript or score. The optional context-analysis checkbox above controls whether transcript text is shared with Google Gemini; audio is sent to Gnani Prisma for transcription.</p>
+          </div>
+          <div class="language-selectors" aria-label="Spoken report language">
+            <div class="language-choice">
+              <label for="languageSelect">Listen to the report in</label>
+              <select id="languageSelect" name="spokenLanguage" disabled>
+                <option value="hi-IN" selected>Hindi · हिन्दी</option>
+                <option value="te-IN">Telugu · తెలుగు</option>
+              </select>
+              <small>Choose the language for the spoken verdict and safety measures.</small>
+            </div>
+          </div>
+          <div class="audio-summary-controls">
+            <button class="btn btn-primary" id="listenButton" disabled>♫ Listen to safety report</button>
+            <button class="btn" id="copyButton" disabled>▢ Copy summary</button>
+          </div>
+          <div class="status" id="speechStatus" aria-live="polite">Analyze a recording to enable the spoken report.</div>
+          <audio id="speechAudio" class="speech-audio hidden" controls preload="none" aria-label="Spoken safety report"></audio>
+        </div>
+
+        <div class="section-head">
+          <h2>Conversation transcript</h2>
+          <span id="transcriptLabel">Transcript</span>
+        </div>
+        <div class="transcript" id="transcript">
+          Your analyzed transcript will appear here.
+        </div>
+
+        <div class="section-head">
+          <h2>Warning signs &amp; evidence</h2>
+          <span id="evidenceCount">NO MATCHES</span>
+        </div>
+        <div class="evidence-list" id="evidenceList">
+          <div class="status">No analysis yet. Run a recording through the analyzer.</div>
+        </div>
+
+        <div class="section-head" id="safety">
+          <h2>What to do next</h2>
+          <span>Safety checklist</span>
+        </div>
+
+        <ul class="checklist">
+          <li><span class="check">✓</span>Never share an OTP, PIN, CVV or password with an unexpected caller.</li>
+          <li><span class="check">✓</span>Hang up and contact the organisation using a number from its official website or app.</li>
+          <li><span class="check">✓</span>Do not install remote-access apps or approve payment requests at a caller's direction.</li>
+          <li><span class="check">✓</span>If money has already been transferred, contact your bank immediately and report through official cybercrime channels.</li>
+        </ul>
+
+        <div class="section-head">
+          <h2>If you've already acted</h2>
+          <span>Recovery guide</span>
+        </div>
+
+        <div class="recovery">
+          <h3>Recommended next steps</h3>
+          <p id="recoveryRecommendation" aria-live="polite">Choose what happened to see practical next steps. When contextual analysis identifies an action already taken, SunoSafe will suggest the closest matching guide. You do not need to share personal details here.</p>
+
+          <div class="recovery-options" id="recoveryOptions">
+            <button class="recovery-option" data-recovery="otp">
+              <strong>I shared an OTP or password</strong><br>
+              Protect accounts and access.
+            </button>
+            <button class="recovery-option" data-recovery="money">
+              <strong>I sent money</strong><br>
+              Take urgent financial safety steps.
+            </button>
+            <button class="recovery-option" data-recovery="app">
+              <strong>I installed an app / shared my screen</strong><br>
+              Reduce device and account risk.
+            </button>
+            <button class="recovery-option" data-recovery="link">
+              <strong>I clicked a link</strong><br>
+              Protect details and accounts.
+            </button>
+            <button class="recovery-option" data-recovery="call">
+              <strong>I only received the call</strong><br>
+              Verify and report safely.
+            </button>
+          </div>
+
+          <div class="recovery-result hidden" id="recoveryResult" aria-live="polite"></div>
+        </div>
+
+        <div class="notice">
+          <strong>Important:</strong> SunoSafe identifies language patterns, not a person's identity or intent.
+          A high signal score is not proof of fraud, and a low score does not confirm safety.
+          Always verify independently.
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="section-head">
+        <h2>03 / How it works</h2>
+        <span>Transparent by design</span>
+      </div>
+      <div class="report">
+        <div class="evidence-list">
+          <div class="evidence-card">
+            <div class="evidence-title"><span class="dot">01 · Transcribe</span></div>
+            <p>Gnani Prisma converts supported audio into text. Transcription errors can affect subsequent analysis.</p>
+          </div>
+          <div class="evidence-card">
+            <div class="evidence-title"><span class="dot">02 · Examine</span></div>
+            <p>Transparent phrase-pattern checks inspect the transcript. Evidence cards show phrases that match configured checks.</p>
+          </div>
+          <div class="evidence-card">
+            <div class="evidence-title"><span class="dot">03 · Respond</span></div>
+            <p>Practical safety guidance and optional Gnani Timbre speech output help users understand possible next steps.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      SunoSafe is a prototype for scam-awareness education.<br>
+      It does not authenticate callers, guarantee detection, or replace professional advice.
+    </footer>
+  </main>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+
+  // These routes match the SunoSafe v0.4.6 main.py backend.
+  const API = {
+    health: "/api/health",
+    analyzeAudio: "/api/analyze-audio",
+    analyzeText: "/api/analyze-text",
+    speak: "/api/speak"
+  };
+
+  function inferRecoveryGuide(data) {
+    // Only auto-suggest from explicit contextual victim/action fields. Never infer that
+    // the recipient acted merely because the caller requested an action.
+    if (!data || data.context_analysis_status !== "enhanced") return null;
+    const victimStatus = String(data.victim_status || "unclear").toLowerCase();
+    const actions = Array.isArray(data.reported_actions) ? data.reported_actions : [];
+    if (!actions.length && victimStatus !== "seeking_help") return null;
+
+    const actionText = actions.join(" ").toLowerCase();
+    if (/(?:sent|transferred|paid|debited|money gone|upi collect|approved.*collect|పంపి|డబ్బు|చెల్లించ|ట్రాన్స్?ఫర్|पैसे भेज|पैसा भेज|ट्रांसफर|भुगतान)/i.test(actionText)) return "money";
+    if (/(?:installed|anydesk|teamviewer|quicksupport|remote access|screen.?share|shared my screen|స్క్రీన్|యాప్ ఇన్.?స్టాల్|ऐप इंस्टॉल|स्क्रीन शेयर)/i.test(actionText)) return "app";
+    if (/(?:otp|one.time password|password|passcode|pin|cvv|shared.*code|told.*code|ఓటీపీ|పిన్|పాస్.?వర్డ్|ओटीपी|पासवर्ड|पिन)/i.test(actionText)) return "otp";
+    if (/(?:clicked.*link|opened.*link|link.*clicked|లింక్.*క్లిక్|लिंक.*क्लिक)/i.test(actionText)) return "link";
+    if (victimStatus === "seeking_help" || victimStatus === "potentially_targeted") return "call";
+    return null;
+  }
+
+  const state = {
+    file: null,
+    durationSeconds: null,
+    summary: "",
+    result: null,
+    sample: false,
+  };
+
+  // Keep browser-side checks aligned with main.py and Gnani Prisma REST limits.
+  const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
+  const MAX_AUDIO_DURATION_SECONDS = 30;
+  const SUPPORTED_AUDIO_EXTENSIONS = /\.(wav|mp3|m4a|ogg|flac|aac)$/i;
+  const SUPPORTED_AUDIO_TYPES = new Set([
+    "audio/wav", "audio/x-wav", "audio/mpeg", "audio/mp3",
+    "audio/ogg", "audio/flac", "audio/aac", "audio/mp4", "audio/x-m4a"
+  ]);
+
+  const recoveryAdvice = {
+    otp: {
+      title: "Secure your accounts now",
+      steps: [
+        "Contact the relevant bank or service using its official contact channel.",
+        "Change affected passwords and revoke active sessions where possible.",
+        "Ask the provider to block or secure the affected account or payment method.",
+        "Never share another OTP with anyone who contacts you unexpectedly."
+      ]
+    },
+    money: {
+      title: "Act quickly to report the transfer",
+      steps: [
+        "Contact your bank or payment provider immediately and request assistance.",
+        "In India, call 1930 promptly to report suspected financial cyber fraud.",
+        "Submit a report through https://cybercrime.gov.in/ and keep the acknowledgement.",
+        "Preserve transaction references, messages and call details."
+      ]
+    },
+    app: {
+      title: "Protect your device and accounts",
+      steps: [
+        "Disconnect from the internet if you suspect active remote access.",
+        "Remove the suspicious app and review its permissions; seek trusted technical help if needed.",
+        "From a separate trusted device, change important passwords and revoke sessions.",
+        "Contact your bank immediately if you opened a banking app or approved transactions."
+      ]
+    },
+    link: {
+      title: "Protect accounts after opening a suspicious link",
+      steps: [
+        "Close the page. Do not enter more information, download files, or approve prompts from it.",
+        "If you entered a password, OTP, card or banking details, contact the relevant bank or service immediately through its official app or website and secure the affected account.",
+        "Change exposed passwords from a separate trusted device and enable or review account security protections.",
+        "Keep the message, URL and screenshots as evidence. If money was lost, call India's cyber-fraud helpline 1930 promptly and report at https://cybercrime.gov.in/."
+      ]
+    },
+    call: {
+      title: "Verify independently",
+      steps: [
+        "Do not call back using a number provided by the suspicious caller.",
+        "Find the organization's contact details through its official website or app.",
+        "Block or report the number if appropriate, and retain evidence of the call.",
+        "Do not assume a call is safe merely because SunoSafe found no warning signs."
+      ]
+    }
+  };
+
+  function setStatus(message) {
+    $("uploadStatus").textContent = message;
+  }
+
+  // Convert backend validation errors into readable messages, never [object Object].
+  function errorText(value) {
+    if (typeof value === "string") return value;
+    if (value == null) return "An unknown error occurred.";
+
+    if (Array.isArray(value)) {
+      return value.map(item => {
+        if (typeof item === "string") return item;
+        const location = Array.isArray(item.loc) ? item.loc.join(" → ") : "";
+        return [location, item.msg || item.message || JSON.stringify(item)]
+          .filter(Boolean)
+          .join(": ");
+      }).join("; ");
+    }
+
+    if (typeof value === "object") {
+      if (typeof value.detail === "string") return value.detail;
+      if (value.detail != null) return errorText(value.detail);
+      if (value.message) return errorText(value.message);
+      if (value.error) return errorText(value.error);
+      return JSON.stringify(value);
+    }
+
+    return String(value);
+  }
+
+  function showError(error) {
+    $("errorBox").textContent = errorText(error);
+    $("errorBox").classList.remove("hidden");
+  }
+
+  function clearError() {
+    $("errorBox").textContent = "";
+    $("errorBox").classList.add("hidden");
+  }
+
+  // Clear prior results whenever a different recording is selected. This prevents
+  // a previous call's warning report or generated speech being mistaken for the new file.
+  function resetReport(message = "Analyze a recording or try the sample to see potential warning signs.") {
+    $("reportStatus").textContent = "Waiting for analysis";
+    $("modelLabel").textContent = "GNANI VOICE AI";
+    $("signalCount").textContent = "0 SIGNAL GROUPS";
+    $("signalTitle").textContent = "Ready for a fresh analysis.";
+    $("signalDescription").textContent = message;
+    $("signalScore").textContent = "—";
+    $("signalBanner").classList.remove("high", "medium");
+    $("signalScore").classList.remove("high", "medium");
+    $("contextInsight").classList.add("hidden");
+    $("contextCallPurpose").textContent = "";
+    $("contextSummary").textContent = "";
+    $("contextStatus").textContent = "";
+    $("victimStatus").textContent = "";
+    $("reportedActions").textContent = "";
+    $("recoveryRecommendation").textContent = "Choose what happened to see practical next steps. When contextual analysis identifies an action already taken, SunoSafe will suggest the closest matching guide. You do not need to share personal details here.";
+    $("recoveryResult").classList.add("hidden");
+    document.querySelectorAll(".recovery-option").forEach(option => option.classList.remove("selected"));
+    $("contextUncertainty").textContent = "";
+    $("transcriptLabel").textContent = "Transcript";
+    $("transcript").textContent = "Your analyzed transcript will appear here.";
+    $("evidenceCount").textContent = "NO MATCHES";
+    const empty = document.createElement("div");
+    empty.className = "status";
+    empty.textContent = "No analysis yet. Run a recording through the analyzer.";
+    $("evidenceList").replaceChildren(empty);
+    $("listenButton").disabled = true;
+    $("copyButton").disabled = true;
+    $("languageSelect").disabled = true;
+    $("speechStatus").textContent = "Analyze a recording to enable the spoken report.";
+    const speechAudio = $("speechAudio");
+    if (speechAudio.dataset.objectUrl) URL.revokeObjectURL(speechAudio.dataset.objectUrl);
+    speechAudio.dataset.objectUrl = "";
+    speechAudio.removeAttribute("src");
+    speechAudio.load();
+    speechAudio.classList.add("hidden");
+    state.summary = "";
+    state.result = null;
+  }
+
+  function clearSelectedFile() {
+    state.file = null;
+    state.durationSeconds = null;
+    state.sample = false;
+    $("audioInput").value = "";
+    $("fileName").textContent = "No file selected";
+    $("analyzeButton").disabled = true;
+    resetReport();
+  }
+
+  async function apiJson(response) {
+    const contentType = response.headers.get("content-type") || "";
+    const body = contentType.includes("json")
+      ? await response.json().catch(() => ({}))
+      : await response.text().catch(() => "");
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(
+          `API endpoint not found: ${response.url}. ` +
+          "Confirm that main.py defines this route and restart FastAPI."
+        );
+      }
+
+      const detail = body && typeof body === "object"
+        ? (body.detail ?? body.error ?? body)
+        : body;
+
+      throw new Error(
+        errorText(detail) || `Request failed (HTTP ${response.status}).`
+      );
+    }
+
+    if (!contentType.includes("json")) {
+      throw new Error(
+        "The backend returned a non-JSON response. Check the endpoint and server logs."
+      );
+    }
+
+    return body;
+  }
+
+  async function checkHealth() {
+    try {
+      const response = await fetch(API.health, { cache: "no-store" });
+      const data = await apiJson(response);
+
+      $("connectionStatus").textContent = data.gnani_configured
+        ? "● Gnani API configured"
+        : "● Backend ready · API key missing";
+
+      setStatus(data.gnani_configured
+        ? `Ready · ${data.stt_model || "Prisma"} · up to ${data.max_audio_seconds || 30}s per clip`
+        : "Backend is running, but GNANI_API_KEY is not configured in .env."
+      );
+    } catch (error) {
+      $("connectionStatus").textContent = "● Backend not verified";
+      setStatus(errorText(error));
+    }
+  }
+
+  function readAudioDuration(file) {
+    return new Promise(resolve => {
+      const audio = document.createElement("audio");
+      const objectUrl = URL.createObjectURL(file);
+      let finished = false;
+      const finish = duration => {
+        if (finished) return;
+        finished = true;
+        URL.revokeObjectURL(objectUrl);
+        audio.removeAttribute("src");
+        audio.load();
+        resolve(Number.isFinite(duration) && duration > 0 ? duration : null);
+      };
+      audio.preload = "metadata";
+      audio.addEventListener("loadedmetadata", () => finish(audio.duration), { once: true });
+      audio.addEventListener("error", () => finish(null), { once: true });
+      audio.src = objectUrl;
+      audio.load();
+    });
+  }
+
+  function formatDuration(seconds) {
+    if (!Number.isFinite(seconds) || seconds <= 0) return "duration not readable in this browser";
+    const rounded = Math.round(seconds);
+    return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, "0")}`;
+  }
+
+  async function selectFile(file) {
+    if (!file) return;
+
+    const allowedExtension = SUPPORTED_AUDIO_EXTENSIONS.test(file.name || "");
+    const allowedMime = SUPPORTED_AUDIO_TYPES.has((file.type || "").toLowerCase());
+
+    if (!allowedExtension && !allowedMime) {
+      clearSelectedFile();
+      showError("Unsupported audio format. Choose WAV, MP3, M4A, OGG, FLAC or AAC.");
+      setStatus("Choose a supported audio file and try again.");
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      clearSelectedFile();
+      showError("This file exceeds the 15 MB upload limit. Choose a shorter or smaller recording.");
+      setStatus("File too large. No audio was uploaded.");
+      return;
+    }
+
+    clearError();
+    setStatus("Checking recording duration…");
+    const duration = await readAudioDuration(file);
+    if (duration !== null && duration > MAX_AUDIO_DURATION_SECONDS + 0.05) {
+      clearSelectedFile();
+      showError(`This recording is ${formatDuration(duration)} long. Gnani Prisma v3.0's REST transcription limit is 30 seconds per recording. Trim it to 30 seconds or less and upload again.`);
+      setStatus("Recording too long. No audio was uploaded.");
+      return;
+    }
+
+    state.file = file;
+    state.durationSeconds = duration;
+    state.sample = false;
+    resetReport("A new recording is selected. Analyze it to generate a fresh report.");
+
+    const durationLabel = duration === null ? "duration will be checked by the server" : `${formatDuration(duration)} duration`;
+    $("fileName").textContent =
+      `${file.name} · ${(file.size / (1024 * 1024)).toFixed(2)} MB · ${durationLabel}`;
+
+    $("analyzeButton").disabled = false;
+    setStatus("Ready to analyze " + file.name + ". Maximum duration: 30 seconds.");
+  }
+
+  $("chooseAudio").addEventListener("click", () => $("audioInput").click());
+
+  $("audioInput").addEventListener("change", event => {
+    selectFile(event.target.files[0]);
+  });
+
+  const dropZone = $("dropZone");
+
+  ["dragenter", "dragover"].forEach(name => {
+    dropZone.addEventListener(name, event => {
+      event.preventDefault();
+      dropZone.classList.add("dragging");
+    });
+  });
+
+  ["dragleave", "drop"].forEach(name => {
+    dropZone.addEventListener(name, event => {
+      event.preventDefault();
+      dropZone.classList.remove("dragging");
+    });
+  });
+
+  dropZone.addEventListener("drop", event => {
+    selectFile(event.dataTransfer.files[0]);
+  });
+
+  // IMPORTANT: main.py expects the upload field to be named "audio".
+  async function postAudio(file) {
+    const form = new FormData();
+    form.append("audio", file, file.name);
+    form.append("use_context", $("useContextAnalysis").checked ? "true" : "false");
+    // Gemini context analysis is an explicit opt-in. Only transcript text is sent to Gemini.
+
+    let response;
+
+    try {
+      response = await fetch(API.analyzeAudio, {
+        method: "POST",
+        body: form
+      });
+    } catch {
+      throw new Error(
+        "Cannot connect to SunoSafe. Keep FastAPI running and open http://127.0.0.1:8000."
+      );
+    }
+
+    return apiJson(response);
+  }
+
+  async function postSampleText(transcript) {
+    const response = await fetch(API.analyzeText, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transcript, use_context: $("useContextAnalysis").checked })
+    });
+
+    return apiJson(response);
+  }
+
+  function getTranscript(data) {
+    return data.transcript ||
+      data.text ||
+      data.transcription ||
+      data.analysis?.transcript ||
+      "";
+  }
+
+  // Convert the actual backend's findings schema into a consistent UI schema.
+  function getFindings(data) {
+    const candidate = data.findings ||
+      data.signals ||
+      data.matches ||
+      data.warning_signs ||
+      data.analysis?.findings ||
+      data.analysis?.signals ||
+      [];
+    const raw = Array.isArray(candidate) ? candidate : [];
+
+    return raw.map(item => {
+      const phraseValue = item.evidence || item.phrases || item.matches ||
+        (item.phrase ? [item.phrase] : []);
+      const phrases = Array.isArray(phraseValue)
+        ? phraseValue.filter(value => typeof value === "string" && value.trim())
+        : (typeof phraseValue === "string" && phraseValue.trim() ? [phraseValue] : []);
+
+      return {
+      title: item.label || item.title || item.category || "Potential warning sign",
+      severity: item.severity || item.level || "medium",
+      phrases,
+      explanation: item.why || item.explanation || item.description ||
+        "Review this phrase and verify independently.",
+      next_step: item.action || item.next_step || item.recommendation ||
+        "Do not disclose sensitive information. Verify independently."
+      };
+    });
+  }
+
+  function getScore(data) {
+    const number = Number(
+      data.risk_score ??
+      data.score ??
+      data.signal_score ??
+      data.analysis?.risk_score ??
+      data.analysis?.score ??
+      0
+    );
+
+    return Number.isFinite(number)
+      ? Math.max(0, Math.min(100, number))
+      : 0;
+  }
+
+  function getHeadline(data, score, count) {
+    if (data.headline) return data.headline;
+    if (!count) return "No listed warning pattern detected";
+    if (score >= 55) return "Several strong warning signs";
+    if (score >= 25) return "Pause and verify this call";
+    return "A few things deserve a closer look";
+  }
+
+  function getSummary(data, score, count) {
+    if (data.summary) return data.summary;
+    if (!count) {
+      return "Our checks did not find the warning patterns covered by this prototype. That does not prove the call is safe.";
+    }
+    if (score >= 55) {
+      return "This transcript contains multiple high-risk patterns. Treat the request cautiously and verify through an independent official channel.";
+    }
+    return "The transcript contains warning signs worth checking before you act. These signals are not proof of fraud.";
+  }
+
+  function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+  }
+
+  function renderTranscript(transcript, findings) {
+    let html = escapeHTML(transcript || "No transcript was returned.");
+
+    const phrases = [...new Set(
+      findings.flatMap(item => item.phrases)
+        .filter(phrase => typeof phrase === "string" && phrase.trim())
+    )].sort((a, b) => b.length - a.length);
+
+    // Highlight matching evidence without adding HTML from the backend.
+    const segments = html.split(/(<[^>]+>)/g);
+
+    for (let i = 0; i < segments.length; i += 2) {
+      for (const phrase of phrases) {
+        const escaped = escapeHTML(phrase);
+        const index = segments[i]
+          .toLocaleLowerCase()
+          .indexOf(escaped.toLocaleLowerCase());
+
+        if (index >= 0) {
+          segments[i] =
+            segments[i].slice(0, index) +
+            "<mark>" +
+            segments[i].slice(index, index + escaped.length) +
+            "</mark>" +
+            segments[i].slice(index + escaped.length);
+        }
+      }
+    }
+
+    $("transcript").innerHTML = segments.join("");
+  }
+
+  function renderFindings(findings) {
+    const container = $("evidenceList");
+    container.replaceChildren();
+
+    $("evidenceCount").textContent = findings.length
+      ? `${findings.length} MATCHES`
+      : "NO MATCHES";
+
+    if (!findings.length) {
+      const empty = document.createElement("div");
+      empty.className = "status";
+      empty.textContent =
+        "No configured warning patterns were detected. This does not prove the call is safe.";
+      container.appendChild(empty);
+      return;
+    }
+
+    for (const finding of findings) {
+      const card = document.createElement("article");
+      card.className = "evidence-card";
+
+      const row = document.createElement("div");
+      row.className = "evidence-title";
+
+      const title = document.createElement("span");
+      title.className = "dot";
+      title.textContent = finding.title;
+
+      const badge = document.createElement("span");
+      badge.className = "severity" +
+        (/medium|caution|low/i.test(finding.severity) ? " medium" : "");
+      badge.textContent = String(finding.severity).toUpperCase();
+
+      row.append(title, badge);
+      card.appendChild(row);
+
+      if (finding.phrases.length) {
+        const tags = document.createElement("div");
+        tags.className = "phrases";
+
+        for (const phrase of finding.phrases) {
+          const tag = document.createElement("span");
+          tag.className = "phrase";
+          tag.textContent = `“${phrase}”`;
+          tags.appendChild(tag);
+        }
+
+        card.appendChild(tags);
+      }
+
+      const explanation = document.createElement("p");
+      explanation.textContent = finding.explanation;
+      card.appendChild(explanation);
+
+      const nextStep = document.createElement("p");
+      const strong = document.createElement("strong");
+      strong.textContent = "Safer next step: ";
+      nextStep.append(strong, document.createTextNode(finding.next_step));
+      card.appendChild(nextStep);
+
+      container.appendChild(card);
+    }
+  }
+
+  function renderResult(data) {
+    const transcript = getTranscript(data);
+    const findings = getFindings(data);
+    const contextStatus = String(data.context_analysis_status || "rules_only");
+    const contextFailed = ["fallback_rules", "missing_key"].includes(contextStatus);
+    const score = getScore(data);
+    const headline = contextFailed
+      ? "Context analysis incomplete — retry required"
+      : getHeadline(data, score, findings.length);
+    const provisionalRuleScore = Number(data.rules_only_score ?? score);
+    const summary = contextFailed
+      ? `Gemini could not complete the conversation analysis. The limited phrase scan found ${findings.length} warning groups (provisional rules-only score: ${provisionalRuleScore}/100). This is not a final risk assessment. Retry the analysis before relying on the result.`
+      : getSummary(data, score, findings.length);
+
+    $("reportStatus").textContent = state.sample
+      ? "Sample analysis"
+      : contextFailed ? "Transcription complete · context analysis incomplete" : "Live transcription complete";
+
+    $("modelLabel").textContent = state.sample
+      ? "ILLUSTRATIVE SAMPLE"
+      : (data.stt_model || data.model || "GNANI PRISMA API");
+
+    $("signalCount").textContent = contextFailed
+      ? `${data.signal_count ?? findings.length} PROVISIONAL RULE GROUPS`
+      : `${data.signal_count ?? findings.length} SIGNAL GROUPS`;
+
+    $("signalTitle").textContent = headline;
+    $("signalDescription").textContent = summary;
+    // A rules-only score is not a final assessment when the user opted into Gemini
+    // and Gemini failed. Show a dash instead of a misleading zero or low-risk verdict.
+    $("signalScore").textContent = contextFailed ? "—" : score;
+    $("scoreMethodLabel").textContent = contextFailed
+      ? `PROVISIONAL RULE SCAN · ${provisionalRuleScore}/100 · NOT FINAL`
+      : "HEURISTIC SCORE · NOT A PROBABILITY";
+
+    const level = contextFailed ? "incomplete" : String(data.risk_level ||
+      (score >= 55 ? "high" : score >= 25 ? "medium" : "low")
+    ).toLowerCase();
+
+    const high = !contextFailed && (["high", "critical"].includes(level) || score >= 55);
+    const medium = !contextFailed && (["elevated", "caution", "medium"].includes(level) ||
+      (score >= 25 && score < 55));
+
+    $("signalBanner").classList.toggle("high", high);
+    $("signalBanner").classList.toggle("medium", medium);
+    $("signalBanner").classList.toggle("incomplete", contextFailed);
+    $("signalScore").classList.toggle("high", high);
+    $("signalScore").classList.toggle("medium", medium);
+    $("signalScore").classList.toggle("incomplete", contextFailed);
+
+    const selectedSourceMode = data.detected_language_label ||
+      (data.detected_language_code === "te-IN" ? "Telugu" :
+        data.detected_language_code === "en-IN" ? "English (India)" :
+          data.detected_language_code === "hi-IN" ? "Hindi" : "Auto-detected language");
+    const detectedLanguage = `${String(selectedSourceMode).toUpperCase()} · PRISMA AUTO-DETECT`;
+    $("transcriptLabel").textContent = state.sample
+      ? "SAMPLE TRANSCRIPT"
+      : detectedLanguage;
+
+    renderTranscript(transcript, findings);
+    renderFindings(findings);
+
+    const contextInsight = $("contextInsight");
+    const contextActive = contextStatus === "enhanced";
+    contextInsight.classList.remove("hidden");
+    $("contextCallPurpose").textContent = data.call_purpose || "Conversation interpretation unavailable";
+    $("contextSummary").textContent = data.context_summary || "Only phrase-pattern checks were used for this report.";
+    const contextStatusLabels = {
+      enhanced: `Contextual AI + evidence validation${data.context_model_used ? ` · ${data.context_model_used}` : ""}`,
+      fallback_rules: "Gemini unavailable · retry required",
+      missing_key: "Gemini key missing · retry required",
+      not_enabled: "Optional contextual AI not selected"
+    };
+    $("contextStatus").textContent = contextStatusLabels[contextStatus] || "Rule-based analysis only";
+    const victimLabels = {
+      not_indicated: "No victim status inferred",
+      potentially_targeted: "Recipient may be targeted",
+      already_acted: "Recipient may have already acted",
+      seeking_help: "Recipient may be seeking help",
+      unclear: "Speaker / victim status unclear"
+    };
+    $("victimStatus").textContent = victimLabels[data.victim_status] || "Victim status unclear";
+    const reportedActions = Array.isArray(data.reported_actions) ? data.reported_actions : [];
+    $("reportedActions").textContent = reportedActions.length
+      ? `Actions the recipient may already have taken (not scored as caller requests): ${reportedActions.join("; ")}`
+      : "";
+    const uncertainties = Array.isArray(data.uncertainties) ? data.uncertainties : [];
+    $("contextUncertainty").textContent = contextFailed
+      ? `Context analysis failed: ${data.context_failure_reason || "Gemini did not return a result after retrying."} ${uncertainties.join(" ")}`
+      : uncertainties.length
+        ? `Context limits: ${uncertainties.join(" ")}`
+        : (contextActive ? "The model's interpretation is grounded in transcript quotes; speaker attribution may still be uncertain." : contextStatus === "missing_key" ? "Add GEMINI_API_KEY to your local .env file, restart SunoSafe, and retry with the opt-in selected." : "This report used phrase-pattern checks only. Select the optional deeper analysis checkbox before the next analysis to request contextual reasoning.");
+
+    state.summary = contextFailed
+      ? `Contextual analysis did not complete. This result is incomplete and must not be treated as a safe-call verdict. Retry the analysis. Limited phrase-rule scan: ${provisionalRuleScore} out of 100.`
+      : [
+      headline,
+      summary,
+      data.victim_status === "already_acted" ? "The recipient may already have taken an action. Prioritize contacting the bank or service provider through an independently verified channel." : "",
+      ...reportedActions.map(item => `The recipient said: ${item}.`),
+      ...findings.map(item =>
+        `${item.title}. ${item.explanation} Safer next step: ${item.next_step}`
+      )
+    ].filter(Boolean).join(" ");
+
+    state.result = data;
+    const recommendedGuide = inferRecoveryGuide(data);
+    const recommendation = $("recoveryRecommendation");
+    if (recommendedGuide) {
+      const labels = {
+        money: "Money may already have been transferred",
+        app: "A remote-access app or screen share may have been used",
+        otp: "A sensitive code or credential may already have been shared",
+        link: "A suspicious link may already have been opened",
+        call: "The recipient may need help verifying or reporting this contact"
+      };
+      recommendation.textContent = `Suggested from the contextual report: ${labels[recommendedGuide]}. Review these steps and choose another guide if it better matches what happened.`;
+      showRecoveryAdvice(recommendedGuide);
+    } else {
+      recommendation.textContent = "Choose what happened to see practical next steps. When contextual analysis identifies an action already taken, SunoSafe will suggest the closest matching guide. You do not need to share personal details here.";
+      $("recoveryResult").classList.add("hidden");
+      document.querySelectorAll(".recovery-option").forEach(option => option.classList.remove("selected"));
+    }
+    $("languageSelect").disabled = false;
+    $("listenButton").disabled = false;
+    $("copyButton").disabled = false;
+
+    $("connectionStatus").textContent = state.sample
+      ? "● Sample analysis"
+      : contextFailed ? "● Context analysis incomplete · retry required" : "● Live analysis complete";
+
+    $("overview").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  $("analyzeButton").addEventListener("click", async () => {
+    if (!state.file) return;
+
+    clearError();
+    $("analyzeButton").disabled = true;
+    $("connectionStatus").textContent = "● Analyzing recording…";
+    setStatus("Uploading audio to Prisma v3.0 for automatic language detection, then analyzing the transcript…");
+
+    try {
+      const result = await postAudio(state.file);
+      state.sample = false;
+      renderResult(result);
+      setStatus(result.context_analysis_status === "fallback_rules" || result.context_analysis_status === "missing_key"
+        ? "Transcription complete, but contextual analysis did not finish. The displayed rule scan is provisional; retry before relying on it."
+        : "Live analysis complete. Review the transcript and evidence below.");
+    } catch (error) {
+      showError(error);
+      $("reportStatus").textContent = "Analysis failed";
+      $("signalTitle").textContent = "We couldn't analyze this recording.";
+      $("signalDescription").textContent = "No new report was generated. Read the error beside the upload control and retry after fixing it.";
+      $("connectionStatus").textContent = "● Analysis error";
+      setStatus("Analysis failed. The message above identifies the backend error.");
+    } finally {
+      $("analyzeButton").disabled = !state.file;
+    }
+  });
+
+  $("demoButton").addEventListener("click", async () => {
+    clearError();
+    state.file = null;
+    $("audioInput").value = "";
+    state.sample = true;
+    $("analyzeButton").disabled = true;
+    $("fileName").textContent = "Sample scenario · no audio uploaded";
+    resetReport("Running the clearly labelled sample scenario. This does not transcribe audio.");
+    setStatus("Running sample text through the backend analysis rules…");
+    $("connectionStatus").textContent = "● Sample analysis…";
+
+    const transcript =
+      "Hello sir, main bank verification team se bol raha hoon. " +
+      "Aapka account aaj block ho sakta hai. Verification ke liye " +
+      "apna OTP bataiye. Main aapko ek link bhej raha hoon, us par " +
+      "click karke details confirm kar dijiye.";
+
+    try {
+      const result = await postSampleText(transcript);
+      state.sample = true;
+      renderResult(result);
+      setStatus("Illustrative sample analyzed by the backend rules. No audio transcription was performed.");
+    } catch (error) {
+      // Explicitly labelled local demo fallback; live upload errors are never hidden.
+      const result = {
+        transcript,
+        source: "local_sample_only",
+        risk_score: 80,
+        risk_level: "high",
+        headline: "Several strong warning signs",
+        summary: "Illustrative example only. This sample is not a live call or proof of fraud.",
+        signal_count: 4,
+        findings: [
+          {
+            label: "Sensitive credentials requested",
+            severity: "critical",
+            evidence: ["apna OTP bataiye"],
+            why: "An unexpected caller asking for an OTP is a serious warning sign.",
+            action: "Never share OTPs. End the call and verify independently."
+          },
+          {
+            label: "Urgency or threat pressure",
+            severity: "high",
+            evidence: ["aaj block ho sakta hai"],
+            why: "Threats of immediate account blocking can pressure people to act without checking.",
+            action: "Pause and contact the bank through its official app or website."
+          },
+          {
+            label: "Authority or institution claim",
+            severity: "high",
+            evidence: ["bank verification team"],
+            why: "A caller's claim to represent a bank does not authenticate their identity.",
+            action: "Do not rely on caller ID or the caller's own contact details."
+          },
+          {
+            label: "Suspicious link or message-based action",
+            severity: "medium",
+            evidence: ["link bhej raha hoon", "us par click"],
+            why: "Unexpected links may lead to phishing pages or malicious downloads.",
+            action: "Do not open the link. Visit the bank's official website directly."
+          }
+        ]
+      };
+
+      renderResult(result);
+      state.sample = true;
+      setStatus("Showing a clearly labelled local sample because the text-analysis API was unavailable. No live transcription was performed.");
+    }
+  });
+
+  const localizedFindingLabels = {
+    "hi-IN": {
+      secret_credentials: "OTP, PIN या पासवर्ड माँगना",
+      urgent_threat: "जल्दबाज़ी या धमकी देना",
+      money_movement: "पैसे भेजने या भुगतान मंज़ूर करने को कहना",
+      remote_access: "ऐप इंस्टॉल करने या स्क्रीन साझा करने को कहना",
+      official_impersonation: "बैंक या सरकारी संस्था होने का दावा",
+      prize_bait: "इनाम या रिफंड का दावा",
+      personal_data: "निजी जानकारी माँगना",
+      suspicious_link: "लिंक खोलने या संदेश पर कार्रवाई करने को कहना"
+    },
+    "te-IN": {
+      secret_credentials: "ఓటీపీ, పిన్ లేదా పాస్‌వర్డ్ అడగడం",
+      urgent_threat: "తొందరపెట్టడం లేదా బెదిరించడం",
+      money_movement: "డబ్బు పంపమని లేదా చెల్లింపును ఆమోదించమని అడగడం",
+      remote_access: "యాప్ ఇన్‌స్టాల్ చేయమని లేదా స్క్రీన్ పంచుకోమని అడగడం",
+      official_impersonation: "బ్యాంకు లేదా ప్రభుత్వ సంస్థ అని చెప్పుకోవడం",
+      prize_bait: "బహుమతి లేదా రీఫండ్ ఇస్తామని చెప్పడం",
+      personal_data: "వ్యక్తిగత వివరాలు అడగడం",
+      suspicious_link: "లింక్ తెరవమని లేదా సందేశంపై చర్య తీసుకోమని అడగడం"
+    }
+  };
+
+  function findingId(item) {
+    if (item && item.id) return item.id;
+    const label = String(item?.label || item?.title || item?.category || "").toLowerCase();
+    if (/credential|otp|password|pin|cvv/.test(label)) return "secret_credentials";
+    if (/urgency|threat|pressure/.test(label)) return "urgent_threat";
+    if (/money|payment|transfer/.test(label)) return "money_movement";
+    if (/remote|screen|app install/.test(label)) return "remote_access";
+    if (/authority|institution|impersonat|bank claim/.test(label)) return "official_impersonation";
+    if (/prize|reward|refund/.test(label)) return "prize_bait";
+    if (/personal data|sensitive data/.test(label)) return "personal_data";
+    if (/link|message-based/.test(label)) return "suspicious_link";
+    return null;
+  }
+
+  function buildSpokenSummary(data, language) {
+    if (data?.context_analysis_status === "fallback_rules") {
+      return language === "te-IN"
+        ? "సునోసేఫ్ భద్రతా నివేదిక. సంభాషణ యొక్క పూర్తి విశ్లేషణ ప్రస్తుతం పూర్తికాలేదు. పరిమిత పదాల తనిఖీ మాత్రమే జరిగింది. ఈ ఫలితాన్ని బట్టి కాల్ సురక్షితమని నిర్ణయించకండి. దయచేసి మళ్లీ విశ్లేషించండి లేదా అధికారిక మార్గంలో స్వతంత్రంగా నిర్ధారించండి."
+        : "सुनोसेफ सुरक्षा रिपोर्ट। बातचीत का पूरा विश्लेषण अभी पूरा नहीं हो पाया। केवल सीमित शब्द-जाँच हुई है। इस नतीजे के आधार पर कॉल को सुरक्षित न मानें। कृपया दोबारा विश्लेषण करें या आधिकारिक माध्यम से स्वतंत्र रूप से पुष्टि करें।";
+    }
+    const score = getScore(data);
+    const level = String(data?.risk_level || (score >= 55 ? "high" : score >= 25 ? "elevated" : score > 0 ? "caution" : "low_signal")).toLowerCase();
+    const rawFindings = Array.isArray(data?.findings) ? data.findings : [];
+    const ids = [...new Set(rawFindings.map(findingId).filter(Boolean))];
+    const labels = [...new Set(ids.map(id => localizedFindingLabels[language][id]).filter(Boolean))];
+
+    const callTypes = {
+      "hi-IN": {
+        secret_credentials: "OTP या पासवर्ड हासिल करने की कोशिश",
+        urgent_threat: "धमकी देकर जल्दबाज़ी कराने वाली कॉल",
+        money_movement: "पैसे ट्रांसफर या भुगतान मंज़ूर कराने वाली संदिग्ध कॉल",
+        remote_access: "रिमोट-एक्सेस ऐप या स्क्रीन शेयर करवाने वाली संदिग्ध कॉल",
+        official_impersonation: "बैंक या सरकारी संस्था बनकर बात करने वाली संदिग्ध कॉल",
+        prize_bait: "इनाम या रिफंड के नाम पर ठगी की संभावित कोशिश",
+        personal_data: "निजी जानकारी जुटाने की संभावित कोशिश",
+        suspicious_link: "संदिग्ध लिंक खुलवाने वाली संभावित फिशिंग कॉल"
+      },
+      "te-IN": {
+        secret_credentials: "ఓటీపీ లేదా పాస్‌వర్డ్ తెలుసుకునే ప్రయత్నం",
+        urgent_threat: "బెదిరించి తొందరపెట్టే కాల్",
+        money_movement: "డబ్బు బదిలీ లేదా చెల్లింపు చేయించే అనుమానాస్పద కాల్",
+        remote_access: "రిమోట్ యాక్సెస్ యాప్ లేదా స్క్రీన్ షేరింగ్ చేయించే అనుమానాస్పద కాల్",
+        official_impersonation: "బ్యాంకు లేదా ప్రభుత్వ సంస్థగా నటించే అనుమానాస్పద కాల్",
+        prize_bait: "బహుమతి లేదా రీఫండ్ పేరుతో మోసం చేసే అవకాశం",
+        personal_data: "వ్యక్తిగత వివరాలు సేకరించే ప్రయత్నం",
+        suspicious_link: "సందేహాస్పద లింక్ క్లిక్ చేయించే ఫిషింగ్ కాల్"
+      }
+    };
+    const types = [...new Set(ids.map(id => callTypes[language][id]).filter(Boolean))];
+
+    const specificAdvice = {
+      "hi-IN": {
+        secret_credentials: "OTP, PIN, CVV या पासवर्ड किसी को न बताएं।",
+        urgent_threat: "घबराकर कोई कदम न उठाएं; कॉल काटकर आधिकारिक नंबर से पुष्टि करें।",
+        money_movement: "पैसे न भेजें और अनजान UPI कलेक्ट अनुरोध मंज़ूर न करें।",
+        remote_access: "कोई ऐप इंस्टॉल न करें और अपनी स्क्रीन साझा न करें।",
+        official_impersonation: "कॉलर की दी हुई जानकारी पर भरोसा न करें; बैंक या संस्था को उसके आधिकारिक ऐप या वेबसाइट से संपर्क करें।",
+        prize_bait: "इनाम या रिफंड पाने के लिए पहले से कोई फीस न दें।",
+        personal_data: "आधार, बैंक या दूसरी निजी जानकारी फोन पर साझा न करें।",
+        suspicious_link: "लिंक न खोलें; संबंधित संस्था की वेबसाइट खुद खोलें।"
+      },
+      "te-IN": {
+        secret_credentials: "మీ ఓటీపీ, పిన్, సీవీవీ లేదా పాస్‌వర్డ్‌ను ఎవరికీ చెప్పకండి.",
+        urgent_threat: "భయపడి వెంటనే చర్య తీసుకోకండి. కాల్ కట్ చేసి అధికారిక నంబర్ ద్వారా నిర్ధారించండి.",
+        money_movement: "డబ్బు పంపకండి; తెలియని UPI కలెక్ట్ అభ్యర్థనను ఆమోదించకండి.",
+        remote_access: "ఎలాంటి యాప్‌ను ఇన్‌స్టాల్ చేయకండి; మీ స్క్రీన్‌ను పంచుకోకండి.",
+        official_impersonation: "కాల్ చేసిన వ్యక్తి చెప్పిన వివరాలనే నమ్మకండి. అధికారిక యాప్ లేదా వెబ్‌సైట్ ద్వారా సంస్థను సంప్రదించండి.",
+        prize_bait: "బహుమతి లేదా రీఫండ్ పొందడానికి ముందుగా ఫీజు చెల్లించకండి.",
+        personal_data: "ఆధార్, బ్యాంక్ లేదా ఇతర వ్యక్తిగత వివరాలను ఫోన్‌లో చెప్పకండి.",
+        suspicious_link: "లింక్‌ను తెరవకండి; సంబంధిత సంస్థ వెబ్‌సైట్‌ను మీరే తెరవండి."
+      }
+    };
+
+    if (language === "te-IN") {
+      let verdict;
+      if (level === "high" || level === "critical") verdict = "ఈ రికార్డింగ్‌లో బలమైన హెచ్చరిక సంకేతాలు కనిపించాయి.";
+      else if (level === "elevated" || level === "medium") verdict = "ఈ రికార్డింగ్‌లో జాగ్రత్తగా పరిశీలించాల్సిన హెచ్చరిక సంకేతాలు ఉన్నాయి.";
+      else if (level === "caution") verdict = "ఈ రికార్డింగ్‌లో మరింత పరిశీలించాల్సిన కొన్ని సంకేతాలు ఉన్నాయి.";
+      else verdict = "మా తనిఖీల్లో ఈ నమూనాలో ఉన్న హెచ్చరిక సంకేతాలు కనిపించలేదు. ఇది కాల్ సురక్షితమని నిరూపించదు.";
+      const typeSentence = types.length
+        ? `ఈ కాల్ ${types.join("; ")} అయి ఉండవచ్చు. ఇది మోసానికి ఖచ్చితమైన రుజువు కాదు. `
+        : "ఈ ఫలితంతో కాల్ రకాన్ని ఖచ్చితంగా నిర్ధారించలేము. ";
+      const advice = [...new Set(ids.map(id => specificAdvice[language][id]).filter(Boolean))];
+      advice.push("ఏదైనా చర్య తీసుకునే ముందు సంస్థ అధికారిక నంబర్ ద్వారా స్వతంత్రంగా నిర్ధారించండి.");
+      advice.push("డబ్బు ఇప్పటికే పంపితే వెంటనే మీ బ్యాంకును సంప్రదించండి.");
+      const evidence = labels.length ? `గుర్తించిన సంకేతాలు: ${labels.join("; ")}. ` : "";
+      return `సునోసేఫ్ భద్రతా నివేదిక. ${verdict} ${typeSentence}స్కోరు 100లో ${score}. ${evidence}ఇప్పుడు చేయాల్సింది: ${[...new Set(advice)].join(" ")} స్కోరు ఒక సూచన మాత్రమే; ఇది తుది తీర్పు కాదు.`;
+    }
+
+    let verdict;
+    if (level === "high" || level === "critical") verdict = "इस रिकॉर्डिंग में गंभीर चेतावनी संकेत मिले हैं।";
+    else if (level === "elevated" || level === "medium") verdict = "इस रिकॉर्डिंग में सावधानी से जाँचने योग्य चेतावनी संकेत मिले हैं।";
+    else if (level === "caution") verdict = "इस रिकॉर्डिंग में कुछ संकेत हैं जिनकी और जाँच करनी चाहिए।";
+    else verdict = "हमारी जाँच में सूचीबद्ध चेतावनी संकेत नहीं मिले। इससे कॉल सुरक्षित साबित नहीं होती।";
+    const typeSentence = types.length
+      ? `यह ${types.join("; ")} जैसी संदिग्ध कॉल हो सकती है। यह धोखाधड़ी का पक्का सबूत नहीं है। `
+      : "इस नतीजे से कॉल के किसी खास प्रकार की पुष्टि नहीं होती। ";
+    const advice = [...new Set(ids.map(id => specificAdvice[language][id]).filter(Boolean))];
+    advice.push("किसी अनजान या अचानक आए कॉल पर OTP, PIN, CVV या पासवर्ड न बताएं।");
+    advice.push("दबाव में पैसे न भेजें और भुगतान मंज़ूर न करें।");
+    advice.push("किसी भी कदम से पहले संस्था के आधिकारिक नंबर से खुद पुष्टि करें।");
+    advice.push("अगर पैसे भेज चुके हैं, तो तुरंत अपने बैंक से संपर्क करें।");
+    const evidence = labels.length ? `पहचाने गए संकेत: ${labels.join("; ")}। ` : "";
+    return `सुनिए, SunoSafe की सुरक्षा रिपोर्ट। ${verdict} ${typeSentence}स्कोर 100 में से ${score} है। ${evidence}अब क्या करें: ${[...new Set(advice)].join(" ")} यह स्कोर केवल एक संकेत है, अंतिम फैसला नहीं।`;
+  }
+
+  $("languageSelect").addEventListener("change", () => {
+    if (!state.result) return;
+    const selectedLanguage = $("languageSelect").value === "te-IN" ? "Telugu" : "Hindi";
+    const player = $("speechAudio");
+    if (player.dataset.objectUrl) URL.revokeObjectURL(player.dataset.objectUrl);
+    player.dataset.objectUrl = "";
+    player.removeAttribute("src");
+    player.load();
+    player.classList.add("hidden");
+    $("speechStatus").textContent = `Ready to read this report in ${selectedLanguage}. Your transcript and score have not changed. Press “Listen to safety report”.`;
+  });
+
+  $("listenButton").addEventListener("click", async () => {
+    clearError();
+    const selectedLanguage = $("languageSelect").value === "te-IN" ? "Telugu" : "Hindi";
+    $("speechStatus").textContent = `Requesting the ${selectedLanguage} safety report from Timbre…`;
+
+    try {
+      // The backend's TranscriptRequest expects "transcript", not "text".
+      const response = await fetch(API.speak, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          transcript: buildSpokenSummary(state.result, $("languageSelect").value),
+          language: $("languageSelect").value
+        })
+      });
+
+      if (!response.ok) {
+        const contentType = response.headers.get("content-type") || "";
+        const body = contentType.includes("json")
+          ? await response.json().catch(() => ({}))
+          : await response.text().catch(() => "");
+
+        if (response.status === 404) {
+          throw new Error(
+            `Speech endpoint not found: ${response.url}. Check that main.py exposes /api/speak.`
+          );
+        }
+
+        const detail = body && typeof body === "object"
+          ? (body.detail ?? body.error ?? body)
+          : body;
+
+        throw new Error(
+          errorText(detail) || `Timbre request failed (HTTP ${response.status}).`
+        );
+      }
+
+      const audioBlob = await response.blob();
+
+      if (!audioBlob.size) {
+        throw new Error("Timbre returned an empty audio response.");
+      }
+
+      const player = $("speechAudio");
+      if (player.dataset.objectUrl) URL.revokeObjectURL(player.dataset.objectUrl);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      player.dataset.objectUrl = audioUrl;
+      player.src = audioUrl;
+      player.classList.remove("hidden");
+      const selectedLanguage = $("languageSelect").value === "te-IN" ? "Telugu" : "Hindi";
+      try {
+        await player.play();
+        $("speechStatus").textContent = `Playing the ${selectedLanguage} safety report based on this analysis. Use the audio controls below to replay it.`;
+      } catch {
+        $("speechStatus").textContent = `Your ${selectedLanguage} safety report is ready. Press play on the audio player below to listen.`;
+      }
+    } catch (error) {
+      $("speechStatus").textContent =
+        "Could not generate speech: " + errorText(error);
+    }
+  });
+
+  $("copyButton").addEventListener("click", async () => {
+    const text = state.summary || "Analyze a recording to generate a summary.";
+
+    try {
+      await navigator.clipboard.writeText(text);
+      $("speechStatus").textContent = "Summary copied.";
+    } catch {
+      $("speechStatus").textContent =
+        "Clipboard access unavailable. Select and copy the summary manually.";
+    }
+  });
+
+  function showRecoveryAdvice(key) {
+    const advice = recoveryAdvice[key];
+    if (!advice) return;
+    document.querySelectorAll(".recovery-option").forEach(option => {
+      option.classList.toggle("selected", option.dataset.recovery === key);
+    });
+    const output = $("recoveryResult");
+    output.replaceChildren();
+    const heading = document.createElement("h4");
+    heading.textContent = advice.title;
+    output.appendChild(heading);
+    const list = document.createElement("ol");
+    advice.steps.forEach(step => {
+      const item = document.createElement("li");
+      item.textContent = step;
+      list.appendChild(item);
+    });
+    output.appendChild(list);
+    const note = document.createElement("p");
+    note.textContent =
+      "This is general safety guidance, not a guarantee of recovery. Use independently verified official channels and do not share sensitive information here.";
+    output.appendChild(note);
+    output.classList.remove("hidden");
+  }
+
+  $("recoveryOptions").addEventListener("click", event => {
+    const button = event.target.closest("[data-recovery]");
+    if (!button) return;
+    showRecoveryAdvice(button.dataset.recovery);
+  });
+
+  document.querySelectorAll(".nav button").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".nav button").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      const target = button.dataset.section;
+      const destination = target === "analyzer"
+        ? "analyzer"
+        : target === "safety"
+          ? "safety"
+          : target === "how"
+            ? "how"
+            : "overview";
+
+      $(destination).scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  });
+
+  checkHealth();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,736 @@
+{
+  "mode": "rules_only",
+  "threshold": 25,
+  "rows": [
+    {
+      "id": "scam_en_otp_threat",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "I am calling from your bank. Tell me your OTP now or your account will be blocked in ten minutes.",
+      "rule_score": 65,
+      "rule_level": "high",
+      "rule_findings": [
+        "secret_credentials",
+        "urgent_threat"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_upi_collect_refund",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Your refund is ready. Approve this UPI collect request and pay the processing fee so we can release it.",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_remote_access",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Install AnyDesk, share your screen, and open your banking app so I can verify your account.",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "remote_access"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_prize_fee",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Congratulations, you won a cash prize. Pay the registration fee now to receive the reward.",
+      "rule_score": 43,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement",
+        "prize_bait"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_fake_courier",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Your parcel is held by customs. Scan this QR code and pay the release charge immediately or the police will contact you.",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_police_transfer",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "This is the cyber crime department. You are under digital arrest. Transfer your money to this verification account to prove it is yours.",
+      "rule_score": 12,
+      "rule_level": "caution",
+      "rule_findings": [
+        "official_impersonation"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_sim_block_link",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Your SIM will be blocked today. Click the link I sent and enter your Aadhaar number and OTP to avoid disconnection.",
+      "rule_score": 87,
+      "rule_level": "high",
+      "rule_findings": [
+        "secret_credentials",
+        "urgent_threat",
+        "personal_data"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_card_cvv",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "I am from the bank verification team. Read out your debit card number and CVV so I can reverse the failed transaction.",
+      "rule_score": 67,
+      "rule_level": "high",
+      "rule_findings": [
+        "secret_credentials",
+        "personal_data"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_secure_account",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "For your safety, move all your savings to this secure account immediately. Do not tell anyone at your branch.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_en_apk_kyc",
+      "language": "English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Your KYC has expired. Download this APK from my link and give the app permission to access your phone.",
+      "rule_score": 10,
+      "rule_level": "caution",
+      "rule_findings": [
+        "suspicious_link"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_hinglish_otp",
+      "language": "Hinglish",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Main bank se bol raha hoon. Aapka account freeze ho jayega, abhi OTP batao aur link open karo.",
+      "rule_score": 77,
+      "rule_level": "high",
+      "rule_findings": [
+        "secret_credentials",
+        "urgent_threat",
+        "official_impersonation"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_hinglish_collect",
+      "language": "Hinglish",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Refund ke liye UPI collect request approve karo. PIN daalo, tabhi paisa receive hoga.",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_hinglish_remote",
+      "language": "Hinglish",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Customer care se bol raha hoon, AnyDesk install karo aur screen share karo. Main refund process kar dunga.",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "remote_access"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_telugu_otp",
+      "language": "Telugu",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "మీ OTP చెప్పండి, లేదంటే మీ అకౌంట్ బ్లాక్ అవుతుంది. వెంటనే చెప్పండి.",
+      "rule_score": 65,
+      "rule_level": "high",
+      "rule_findings": [
+        "secret_credentials",
+        "urgent_threat"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_telugu_payment",
+      "language": "Telugu",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "మీ రిఫండ్ రావాలంటే ఈ UPI కలెక్ట్ రిక్వెస్ట్ ఆమోదించండి, ప్రాసెసింగ్ ఫీజు వెంటనే చెల్లించండి.",
+      "rule_score": 48,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "urgent_threat",
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_telugu_remote",
+      "language": "Telugu",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "ఈ యాప్ ఇన్‌స్టాల్ చేయండి, మీ ఫోన్ స్క్రీన్ షేర్ చేయండి. మీ బ్యాంక్ అకౌంట్ నేను చెక్ చేస్తాను.",
+      "rule_score": 38,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "remote_access",
+        "suspicious_link"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "scam_telugu_threat_link",
+      "language": "Telugu-English",
+      "label": "suspicious",
+      "expected_assessment": [
+        "likely_scam_attempt",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "మీ KYC expire అయింది. ఈ link click చేసి OTP enter చేయండి, లేదంటే account block అవుతుంది.",
+      "rule_score": 20,
+      "rule_level": "caution",
+      "rule_findings": [
+        "urgent_threat"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_otp_advice",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Never share your OTP, PIN, CVV or password with anyone. Your bank will never ask you to read it out.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_official_app",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "For KYC, open your bank's official app yourself or visit a branch. Do not click links sent by callers or share an OTP.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_payment_receipt",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "This is an automated confirmation. Your payment of twelve hundred rupees was received yesterday. No action is required.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_otp_question",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Did the caller ask you to share an OTP, or were they warning you never to share it? I am trying to understand what happened.",
+      "rule_score": 45,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "secret_credentials"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_bank_dispute",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "I noticed a transaction I do not recognize. I will call the number printed on my bank card and ask the bank to investigate.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_no_action_refund",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Your refund has been processed to the original payment method. You do not need to pay a fee, scan a QR code, or share any password.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_delivery",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Your parcel is out for delivery. The courier will deliver it to your address. There is no extra payment due.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_en_friend_warning",
+      "language": "English",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "My friend warned me about fake police calls. If anyone asks for money or an OTP, I should end the call and verify independently.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_hinglish_negation",
+      "language": "Hinglish",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Kisi ko bhi OTP mat dena. UPI collect request approve mat karna. Bank kabhi bhi phone par PIN nahi maangta.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_hinglish_no_install",
+      "language": "Hinglish",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "Unknown caller ke kehne par AnyDesk install mat karna aur screen share mat karna. Pehle official customer care se verify karo.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_telugu_otp_warning",
+      "language": "Telugu",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "మీ OTP ఎవరికీ చెప్పకండి. బ్యాంక్ ఎప్పుడూ OTP లేదా PIN అడగదు. అనుమానం ఉంటే అధికారిక నంబర్‌కు కాల్ చేయండి.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_telugu_no_payment",
+      "language": "Telugu",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "డబ్బు బదిలీ చేయకండి, UPI కలెక్ట్ రిక్వెస్ట్ ఆమోదించకండి. ముందుగా బ్యాంక్ అధికారిక యాప్‌లో వివరాలు చూడండి.",
+      "rule_score": 12,
+      "rule_level": "caution",
+      "rule_findings": [
+        "official_impersonation"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_telugu_receipt",
+      "language": "Telugu",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "మీ చెల్లింపు విజయవంతమైంది. ఇది కేవలం రసీదు సమాచారం మాత్రమే. మీరు ఏ లింక్ క్లిక్ చేయాల్సిన అవసరం లేదు.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_hindi_otp",
+      "language": "Hindi",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "अपना ओटीपी, पिन या पासवर्ड किसी को मत बताइए। बैंक कभी भी फोन पर ये जानकारी नहीं मांगता।",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "safe_hindi_verify",
+      "language": "Hindi",
+      "label": "benign",
+      "expected_assessment": [
+        "apparently_legitimate",
+        "unclear_or_insufficient"
+      ],
+      "transcript": "किसी अनजान लिंक पर क्लिक मत कीजिए। बैंक की जानकारी उसके आधिकारिक ऐप या शाखा से जांचिए।",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "victim_already_shared_otp",
+      "language": "English",
+      "label": "victim_help",
+      "expected_victim_status": [
+        "already_acted",
+        "seeking_help"
+      ],
+      "transcript": "I already shared my OTP with someone who called me. Now money has gone from my account. Please help me block it.",
+      "rule_score": 20,
+      "rule_level": "caution",
+      "rule_findings": [
+        "urgent_threat"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "victim_installed_remote_app",
+      "language": "English",
+      "label": "victim_help",
+      "expected_victim_status": [
+        "already_acted",
+        "seeking_help"
+      ],
+      "transcript": "I installed the remote support app because the caller told me to. They accessed my phone and I can no longer open my banking app. What should I do?",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "remote_access"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "victim_upi_payment",
+      "language": "Hinglish",
+      "label": "victim_help",
+      "expected_victim_status": [
+        "already_acted",
+        "seeking_help"
+      ],
+      "transcript": "Maine UPI collect request approve kar diya aur paise chale gaye. Ab bank ko kaise report karun?",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "victim_threat_no_action",
+      "language": "Telugu",
+      "label": "victim_help",
+      "expected_victim_status": [
+        "potentially_targeted",
+        "seeking_help"
+      ],
+      "transcript": "ఒక వ్యక్తి పోలీసులమని ఫోన్ చేసి డబ్బు పంపమన్నాడు. నేను డబ్బు పంపలేదు. ఇప్పుడు ఏం చేయాలి?",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "victim_link_clicked",
+      "language": "English",
+      "label": "victim_help",
+      "expected_victim_status": [
+        "already_acted",
+        "seeking_help"
+      ],
+      "transcript": "I clicked the link in the message but did not enter any details or transfer money. Is my account at risk?",
+      "rule_score": 28,
+      "rule_level": "elevated",
+      "rule_findings": [
+        "money_movement"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": true,
+      "context_status": "not_run"
+    },
+    {
+      "id": "ambiguous_bank_identity_only",
+      "language": "English",
+      "label": "ambiguous",
+      "expected_assessment": [
+        "unclear_or_insufficient",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Hello, I am calling from your bank's customer support department about your recent statement.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "ambiguous_kyc_pending",
+      "language": "English",
+      "label": "ambiguous",
+      "expected_assessment": [
+        "unclear_or_insufficient",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Your KYC update is pending. Please contact customer service to check the status.",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "ambiguous_police_claim",
+      "language": "English",
+      "label": "ambiguous",
+      "expected_assessment": [
+        "unclear_or_insufficient",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "This is the police department. We need to discuss a complaint associated with your phone number. Please verify our identity before sharing information.",
+      "rule_score": 12,
+      "rule_level": "caution",
+      "rule_findings": [
+        "official_impersonation"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "ambiguous_refund_help",
+      "language": "Hinglish",
+      "label": "ambiguous",
+      "expected_assessment": [
+        "unclear_or_insufficient",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "Aapka refund pending hai. Main process samjha sakta hoon. Pehle bataiye aapne payment kis app se kiya tha?",
+      "rule_score": 15,
+      "rule_level": "caution",
+      "rule_findings": [
+        "prize_bait"
+      ],
+      "rule_flag_any": true,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    },
+    {
+      "id": "ambiguous_fragment",
+      "language": "English",
+      "label": "ambiguous",
+      "expected_assessment": [
+        "unclear_or_insufficient",
+        "suspicious_needs_verification"
+      ],
+      "transcript": "... account verification ... call again ... urgent ... details ...",
+      "rule_score": 0,
+      "rule_level": "low_signal",
+      "rule_findings": [],
+      "rule_flag_any": false,
+      "rule_flag_threshold": false,
+      "context_status": "not_run"
+    }
+  ]
+}

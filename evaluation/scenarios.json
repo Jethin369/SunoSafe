@@ -1,0 +1,98 @@
+[
+  {
+    "id": "otp_request_en",
+    "language": "English",
+    "label": "high_risk",
+    "transcript": "I am calling from your bank. Tell me your OTP now or your account will be blocked."
+  },
+  {
+    "id": "otp_warning_en",
+    "language": "English",
+    "label": "safe_advice",
+    "transcript": "This is your bank's security team. Never share your OTP with anyone, and we will never ask you to read it out."
+  },
+  {
+    "id": "otp_mention_en",
+    "language": "English",
+    "label": "neutral",
+    "transcript": "I received an OTP from my bank yesterday, but I did not share it with anyone."
+  },
+  {
+    "id": "money_request_en",
+    "language": "English",
+    "label": "high_risk",
+    "transcript": "To release your refund, pay a processing fee now using this UPI collect request."
+  },
+  {
+    "id": "victim_already_acted",
+    "language": "English",
+    "label": "victim_help",
+    "transcript": "I already shared my OTP and transferred the money. Can you help me block the account?"
+  },
+  {
+    "id": "remote_access_en",
+    "language": "English",
+    "label": "high_risk",
+    "transcript": "Install AnyDesk and share your screen so I can verify your bank account."
+  },
+  {
+    "id": "authority_only",
+    "language": "English",
+    "label": "needs_verification",
+    "transcript": "Hello, I am calling from the bank's customer support department about your recent statement."
+  },
+  {
+    "id": "authority_threat_credentials",
+    "language": "Hinglish",
+    "label": "high_risk",
+    "transcript": "Main bank se bol raha hoon. Aapka account freeze ho jayega, abhi OTP batao."
+  },
+  {
+    "id": "safe_kyc",
+    "language": "English",
+    "label": "safe_advice",
+    "transcript": "Your KYC is due. Please open your bank's official app yourself. Do not share your OTP or password on this call."
+  },
+  {
+    "id": "prize_fee",
+    "language": "English",
+    "label": "high_risk",
+    "transcript": "Congratulations, you won a prize. Pay the registration fee first so we can release the reward."
+  },
+  {
+    "id": "telugu_otp_request",
+    "language": "Telugu",
+    "label": "high_risk",
+    "transcript": "మీ OTP చెప్పండి, లేదంటే మీ అకౌంట్ బ్లాక్ అవుతుంది."
+  },
+  {
+    "id": "telugu_otp_warning",
+    "language": "Telugu",
+    "label": "safe_advice",
+    "transcript": "మీ OTP ఎవరికీ చెప్పకండి. బ్యాంక్ ఎప్పుడూ OTP అడగదు."
+  },
+  {
+    "id": "hinglish_negated_transfer",
+    "language": "Hinglish",
+    "label": "safe_advice",
+    "transcript": "Kisi ko bhi paise transfer mat karna. UPI collect request approve mat karna."
+  },
+  {
+    "id": "question_about_otp",
+    "language": "English",
+    "label": "neutral",
+    "transcript": "Did the caller ask you for an OTP, or were they warning you never to share it?"
+  },
+  {
+    "id": "link_and_apk",
+    "language": "English",
+    "label": "high_risk",
+    "transcript": "I will send you a link. Open it and download this APK to fix your account."
+  },
+  {
+    "id": "legitimate_payment_info",
+    "language": "English",
+    "label": "neutral",
+    "transcript": "Your payment of 1200 rupees was received yesterday. This is an automated confirmation. No action is required."
+  }
+]
