@@ -93,7 +93,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\run_windows.ps1
 Open:
 
 ```text
-http://127.0.0.1:8000
+[http://127.0.0.1:8000](https://sunosafe.onrender.com/)
 ```
 
 ## Testing
